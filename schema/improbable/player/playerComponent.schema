@@ -1,0 +1,22 @@
+package improbable.player;
+
+type QuaternionData {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+    float w = 4;
+}
+
+type TransformData {
+    Coordinates position = 1;
+    QuaternionData rotation = 2;
+}
+
+component PlayerComponent {
+  id = 1002;
+  EntityPosition position = 1;
+
+  TransformData head = 2;
+  TransformData left_hand = 3;
+  TransformData right_hand = 4;
+}
