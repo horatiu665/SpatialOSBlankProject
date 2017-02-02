@@ -3,13 +3,12 @@ using Improbable.Math;
 using Improbable.Player;
 using Improbable.Unity.Core.Acls;
 using Improbable.Worker;
-using UnityEngine;
 
 namespace Assets.EntityTemplates
 {
-    public class PlayerEntityTemplate : MonoBehaviour
+    public class EntityTemplateFactory
     {
-        public static SnapshotEntity GeneratePlayerSnapshotEntityTemplate()
+        public static SnapshotEntity GeneratePlayerSnapshotEntityTemplate(string workerId)
         {
             // Set name of Unity prefab associated with this entity
             var playerEntity = new SnapshotEntity { Prefab = "PlayerPrefab" };
@@ -26,11 +25,13 @@ namespace Assets.EntityTemplates
                 )
             );
 
+            var specificClientPredicate = CommonPredicates.SpecificClientOnly(workerId);
+
             var acl = Acl.Build()
                 // Both FSim (server) workers and client workers granted read access over all states
                 .SetReadAccess(CommonPredicates.PhysicsOrVisual)
-                // Both FSim (server) workers and client workers (local authority) granted write access over PlayerComponent component
-                .SetWriteAccess<PlayerComponent>(CommonPredicates.PhysicsOrVisual);
+                // Only the local client worker (local authority) granted write access over PlayerComponent component
+                .SetWriteAccess<PlayerComponent>(specificClientPredicate);
 
             playerEntity.SetAcl(acl);
 

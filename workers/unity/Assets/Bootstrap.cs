@@ -1,38 +1,59 @@
-﻿using Improbable.Unity;
-using Improbable.Unity.Configuration;
-using Improbable.Unity.Core;
-using UnityEngine;
-
-// Placed on a gameobject in client scene to execute connection logic on client startup
-public class Bootstrap : MonoBehaviour
+﻿namespace Assets.Gamelogic
 {
-    public WorkerConfigurationData Configuration = new WorkerConfigurationData();
+    using Improbable.Unity;
+    using Improbable.Unity.Configuration;
+    using Improbable.Unity.Core;
+    using UnityEngine;
 
-    public void Start()
+    // Placed on a gameobject in client scene to execute connection logic on client startup
+    public sealed class Bootstrap : MonoBehaviour
     {
-        SpatialOS.ApplyConfiguration(Configuration);
+        [SerializeField]
+        private int _targetFramerate = 90;
 
-        switch (SpatialOS.Configuration.EnginePlatform)
+        [SerializeField]
+        private int _fixedFramerate = 90;
+
+        public WorkerConfigurationData Configuration = new WorkerConfigurationData();
+
+        private void OnEnable()
         {
-            case EnginePlatform.FSim:
-                SpatialOS.OnDisconnected += reason => Application.Quit();
+            SpatialOS.ApplyConfiguration(Configuration);
 
-                var targetFramerate = 120;
-                var fixedFramerate = 20;
+            Application.targetFrameRate = _targetFramerate;
+            switch (SpatialOS.Configuration.EnginePlatform)
+            {
+                case EnginePlatform.FSim:
+                {
+                    Time.fixedDeltaTime = 1.0f / _fixedFramerate;
+                    SpatialOS.OnDisconnected += reason => Application.Quit();
+                    break;
+                }
 
-                Application.targetFrameRate = targetFramerate;
-                Time.fixedDeltaTime = 1.0f / fixedFramerate;
-                break;
-            case EnginePlatform.Client:
-                SpatialOS.OnConnected += OnConnected;
-                break;
+                case EnginePlatform.Client:
+                {
+                    SpatialOS.OnConnected += OnConnected;
+                    break;
+                }
+            }
+
+            SpatialOS.Connect(this.gameObject);
         }
 
-        SpatialOS.Connect(gameObject);
-    }
+        private void OnConnected()
+        {
+            Debug.Log("Bootstrap connected to SpatialOS...");
+            ClientPlayerSpawner.SpawnPlayer();
+        }
 
-    public void OnConnected()
-    {
-        Debug.Log("Bootstrap connected to SpatialOS...");
+        private void OnApplicationQuit()
+        {
+            if (SpatialOS.IsConnected)
+            {
+                Debug.Log("Bootstrap disconnecting from SpatialOS.");
+                SpatialOS.OnConnected -= OnConnected;
+                SpatialOS.Disconnect();
+            }
+        }
     }
 }

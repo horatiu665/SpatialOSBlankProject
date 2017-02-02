@@ -1,6 +1,8 @@
 namespace Assets.Gamelogic
 {
+    using Improbable;
     using Improbable.Player;
+    using Improbable.Unity.Core;
     using Improbable.Unity.Visualizer;
     using UnityEngine;
 
@@ -129,5 +131,18 @@ namespace Assets.Gamelogic
 
             this.transform.position += velocity.normalized * _moveSpeed * Time.deltaTime;
         }
+
+        //private void OnApplicationQuit()
+        //{
+        //    if (!SpatialOS.IsConnected)
+        //    {
+        //        return;
+        //    }
+
+        //    if (EntityId.IsValidEntityId(_playerWriter.EntityId))
+        //    {
+        //        SpatialOS.Connection.SendCommandRequest
+        //    }
+        //}
     }
 }

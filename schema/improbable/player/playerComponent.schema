@@ -1,5 +1,17 @@
 package improbable.player;
 
+type SpawnPlayerRequest {
+}
+
+type SpawnPlayerResponse {
+}
+
+type DeletePlayerRequest {
+}
+
+type DeletePlayerResponse {
+}
+
 type QuaternionData {
     float x = 1;
     float y = 2;
@@ -13,10 +25,13 @@ type TransformData {
 }
 
 component PlayerComponent {
-  id = 1002;
-  EntityPosition position = 1;
+    id = 1000;
+    EntityPosition position = 1;
 
-  TransformData head = 2;
-  TransformData left_hand = 3;
-  TransformData right_hand = 4;
+    TransformData head = 2;
+    TransformData left_hand = 3;
+    TransformData right_hand = 4;
+
+    command SpawnPlayerRequest spawn_player returns SpawnPlayerResponse;
+    command DeletePlayerRequest delete_player returns DeletePlayerResponse;
 }
