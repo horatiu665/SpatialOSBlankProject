@@ -2,6 +2,7 @@ namespace Assets.Gamelogic
 {
     using Improbable.Math;
     using Improbable.Player;
+    using Improbable.Worker;
     using UnityEngine;
 
     public static class Extensions
@@ -53,6 +54,11 @@ namespace Assets.Gamelogic
                    (Mathf.Abs(data.y - comparison.y) > rotationThreshold) ||
                    (Mathf.Abs(data.z - comparison.z) > rotationThreshold) ||
                    (Mathf.Abs(data.w - comparison.w) > rotationThreshold);
+        }
+
+        public static TransformData DefaultTransformData(this SnapshotEntity entity)
+        {
+            return new TransformData(Coordinates.ZERO, new QuaternionData(0f, 0f, 0f, 0f));
         }
     }
 }

@@ -19,7 +19,8 @@ public class SnapshotMenu : MonoBehaviour
         var snapshotEntities = new Dictionary<EntityId, SnapshotEntity>();
         var currentEntityId = 0;
 
-        snapshotEntities.Add(new EntityId(currentEntityId++), ExampleEntityTemplate.GenerateExampleSnapshotEntityTemplate());
+        //snapshotEntities.Add(new EntityId(currentEntityId++), ExampleEntityTemplate.GenerateExampleSnapshotEntityTemplate());
+        snapshotEntities.Add(new EntityId(currentEntityId++), PlayerEntityTemplate.GeneratePlayerSnapshotEntityTemplate());
 
         SaveSnapshot(snapshotEntities);
     }
