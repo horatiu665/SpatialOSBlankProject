@@ -15,6 +15,25 @@ namespace Assets.Gamelogic
         [SerializeField]
         private double _rotationSendThreshold = 2f;
 
+        [SerializeField]
+        private float _moveSpeed = 5f;
+
+        [Header("Debugging")]
+        [SerializeField]
+        private bool _allowKeyInput;
+
+        [SerializeField]
+        private KeyCode _moveForward = KeyCode.W;
+
+        [SerializeField]
+        private KeyCode _moveLeft = KeyCode.A;
+
+        [SerializeField]
+        private KeyCode _moveRight = KeyCode.D;
+
+        [SerializeField]
+        private KeyCode _moveBack = KeyCode.S;
+
         [Header("References")]
         [SerializeField]
         private Transform _head;
@@ -78,6 +97,35 @@ namespace Assets.Gamelogic
                     _playerWriter.Send(update);
                 }
             }
+        }
+
+        private void Update()
+        {
+            if (!_allowKeyInput || !_playerWriter.HasAuthority)
+            {
+                return;
+            }
+
+            Vector3 velocity = Vector3.zero;
+            if (Input.GetKey(_moveForward))
+            {
+                velocity = this.transform.forward;
+            }
+            else if (Input.GetKey(_moveBack))
+            {
+                velocity = -this.transform.forward;
+            }
+
+            if (Input.GetKey(_moveRight))
+            {
+                velocity += this.transform.right;
+            }
+            else if (Input.GetKey(_moveLeft))
+            {
+                velocity += -this.transform.right;
+            }
+
+            this.transform.position += velocity.normalized * _moveSpeed * Time.deltaTime;
         }
     }
 }
