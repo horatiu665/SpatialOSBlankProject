@@ -17,10 +17,10 @@ public class SnapshotMenu : MonoBehaviour
     private static void GenerateSnapshotProgrammatically()
     {
         var snapshotEntities = new Dictionary<EntityId, SnapshotEntity>();
-        var currentEntityId = 0;
+        //var currentEntityId = 0;
 
         //snapshotEntities.Add(new EntityId(currentEntityId++), ExampleEntityTemplate.GenerateExampleSnapshotEntityTemplate());
-        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.GeneratePlayerSnapshotEntityTemplate());
+        //snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.GeneratePlayerSnapshotEntityTemplate());
 
         SaveSnapshot(snapshotEntities);
     }
